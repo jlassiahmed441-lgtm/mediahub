@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('titre', 'MediaHub')</title>
+    <meta name="description" content="@yield('meta', 'Plateforme MediaHub de gestion et de diffusion de contenus multimédias.')">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>

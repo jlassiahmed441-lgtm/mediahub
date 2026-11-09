@@ -17,8 +17,7 @@ Route::resource('contenus', ContenuController::class)
     ->name('contenus.tri');
 
 
-Route::get('/contenus/tri/{tri?}', [ContenuController::class, 'index'])
-    ->name('contenus.tri');
+
 
 
 Route::get('/a-propos', [PageController::class, 'aPropos'])

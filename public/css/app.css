@@ -74,3 +74,11 @@ h1 {
         padding: 15px;
     }
 }
+.carte-vedette {
+    border: 3px solid #facc15;
+    background-color: #fffbeb;
+}
+
+.carte-vedette h2 {
+    color: #d97706;
+}
