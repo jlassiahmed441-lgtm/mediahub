@@ -7,7 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 
 
-Route::get('/', [PageController::class, 'accueil']);
+Route::get('/', [PageController::class, 'accueil'])->name('accueil');
 
 
 Route::resource('contenus', ContenuController::class)
@@ -31,3 +31,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 Route::get('/categories', [CategoryController::class, 'index'])
     ->name('categories.index');
+   
