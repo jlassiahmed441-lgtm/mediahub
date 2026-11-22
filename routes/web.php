@@ -28,6 +28,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/tableau-de-bord', [AdminController::class, 'index'])
         ->name('dashboard');
 });
-Route::get('/categories', [CategoryController::class, 'index'])
-    ->name('categories.index');
+Route::resource('categories', CategoryController::class);
    

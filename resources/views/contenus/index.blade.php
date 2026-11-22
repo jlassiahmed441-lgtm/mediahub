@@ -6,6 +6,10 @@
 
     <h1>Contenus multimédias</h1>
 
+    <p>
+        <a href="{{ route('contenus.create') }}">Ajouter une publication</a>
+    </p>
+
     @php
         $compteur = 0;
     @endphp
@@ -25,9 +29,25 @@
                 <strong>Auteur :</strong>
                 {{ $publication->auteur->name ?? 'Auteur inconnu' }}
             </p>
+
             <a href="{{ route('contenus.show', $publication->id) }}">
-                    Voir les détails
+                Voir les détails
             </a>
+
+            <a href="{{ route('contenus.edit', $publication->id) }}">
+                Modifier
+            </a>
+
+            <form action="{{ route('contenus.destroy', $publication->id) }}"
+                  method="POST"
+                  onsubmit="return confirm('Voulez-vous vraiment supprimer cette publication ?')">
+
+                @csrf
+                @method('DELETE')
+
+                <button type="submit">Supprimer</button>
+
+            </form>
 
         </x-carte>
 
@@ -36,10 +56,11 @@
         @endphp
 
     @empty
+
         <p>Aucune publication disponible pour le moment.</p>
+
     @endforelse
 
     {{ $publications->links() }}
 
 @endsection
-

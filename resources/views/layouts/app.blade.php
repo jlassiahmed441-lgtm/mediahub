@@ -13,7 +13,21 @@
     @include('partials.navigation')
 
     <main class="conteneur">
+
+        @if (session('succes'))
+            <div class="alerte alerte-succes">
+                {{ session('succes') }}
+            </div>
+        @endif
+
+        @if (session('erreur'))
+            <div class="alerte alerte-erreur">
+                {{ session('erreur') }}
+            </div>
+        @endif
+
         @yield('contenu')
+
     </main>
 
     @include('partials.pied-de-page')
