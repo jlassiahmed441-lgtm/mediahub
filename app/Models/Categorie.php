@@ -13,5 +13,12 @@ class Categorie extends Model
         'nom',
         'slug',
     ];
+
+    // Une catégorie possède plusieurs publications
+    public function publications()
+    {
+        return $this->hasMany(Publication::class);
+    }
 }
+
 

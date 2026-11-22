@@ -2,31 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Publication;
+
 class ContenuController extends Controller
 {
     public function index($tri = 'recent')
     {
-        $contenus = [
-            (object) [
-                'titre' => 'Court-métrage documentaire',
-                'description' => 'Un aperçu de la vie urbaine.'
-            ],
-            (object) [
-                'titre' => 'Podcast technologie',
-                'description' => 'Actualités du développement web.'
-            ],
-        ];
+        $publications = Publication::with(['categorie', 'auteur'])
+    ->latest()
+    ->paginate(9);
 
         return view('contenus.index', [
-            'contenus' => $contenus,
+            'publications' => $publications,
             'tri' => $tri
         ]);
     }
 
-    public function show($id)
-    {
-        return 'Détail du contenu numéro ' . $id;
-    }
+    
+public function show(Publication $contenu)
+{
+    $contenu->load([
+        'categorie',
+        'auteur',
+        'commentaires.auteur'
+    ]);
+
+    return view('contenus.show', [
+        'publication' => $contenu
+    ]);
 }
+
+}
+
+
 
 

@@ -10,10 +10,25 @@
         $compteur = 0;
     @endphp
 
-    @forelse ($contenus as $contenu)
+    @forelse ($publications as $publication)
 
-        <x-carte :titre="$contenu->titre" :vedette="$compteur === 0">
-            <p>{{ $contenu->description }}</p>
+        <x-carte :titre="$publication->titre" :vedette="$compteur === 0">
+
+            <p>{{ $publication->contenu }}</p>
+
+            <p>
+                <strong>Catégorie :</strong>
+                {{ $publication->categorie->nom ?? 'Sans catégorie' }}
+            </p>
+
+            <p>
+                <strong>Auteur :</strong>
+                {{ $publication->auteur->name ?? 'Auteur inconnu' }}
+            </p>
+            <a href="{{ route('contenus.show', $publication->id) }}">
+                    Voir les détails
+            </a>
+
         </x-carte>
 
         @php
@@ -21,7 +36,10 @@
         @endphp
 
     @empty
-        <p>Aucun contenu disponible pour le moment.</p>
+        <p>Aucune publication disponible pour le moment.</p>
     @endforelse
 
+    {{ $publications->links() }}
+
 @endsection
+
