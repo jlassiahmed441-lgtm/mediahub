@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Publication;
 use App\Models\Categorie;
-use Illuminate\Http\Request;
+use App\Http\Requests\StorePublicationRequest;
+use App\Http\Requests\UpdatePublicationRequest;
 
 class ContenuController extends Controller
 {
@@ -40,19 +41,21 @@ class ContenuController extends Controller
         return view('contenus.create', compact('categories'));
     }
 
-    public function store(Request $request)
-    {
-        $publication = Publication::create([
-            'titre' => $request->titre,
-            'contenu' => $request->contenu,
-            'categorie_id' => $request->categorie_id,
-            'user_id' => 1
-        ]);
+    
+public function store(StorePublicationRequest $request)
+{
+    $donnees = $request->validated();
 
-        return redirect()
-            ->route('contenus.show', $publication)
-            ->with('succes', 'Publication créée avec succès.');
-    }
+    // En attendant l'authentification (semaine 8)
+    $donnees['user_id'] = 1;
+
+    $publication = Publication::create($donnees);
+
+    return redirect()
+        ->route('contenus.show', $publication)
+        ->with('succes', 'Publication créée avec succès.');
+}
+
     public function edit(Publication $contenu)
 {
     $categories = Categorie::all();
@@ -63,18 +66,16 @@ class ContenuController extends Controller
     ]);
 }
 
-public function update(Request $request, Publication $contenu)
+
+public function update(UpdatePublicationRequest $request, Publication $contenu)
 {
-    $contenu->update([
-        'titre' => $request->titre,
-        'contenu' => $request->contenu,
-        'categorie_id' => $request->categorie_id
-    ]);
+    $contenu->update($request->validated());
 
     return redirect()
         ->route('contenus.show', $contenu)
         ->with('succes', 'Publication modifiée avec succès.');
 }
+
 
 public function destroy(Publication $contenu)
 {
