@@ -6,6 +6,7 @@ use App\Models\Publication;
 use App\Models\Categorie;
 use App\Http\Requests\StorePublicationRequest;
 use App\Http\Requests\UpdatePublicationRequest;
+use App\Models\User;
 
 class ContenuController extends Controller
 {
@@ -46,8 +47,8 @@ public function store(StorePublicationRequest $request)
 {
     $donnees = $request->validated();
 
-    // En attendant l'authentification (semaine 8)
-    $donnees['user_id'] = 1;
+   // Associer la publication à l'utilisateur connecté
+    $donnees['user_id'] = auth()->id();
 
     $publication = Publication::create($donnees);
 
@@ -58,6 +59,7 @@ public function store(StorePublicationRequest $request)
 
     public function edit(Publication $contenu)
 {
+    $this->authorize('update', $contenu);
     $categories = Categorie::all();
 
     return view('contenus.edit', [
@@ -69,6 +71,7 @@ public function store(StorePublicationRequest $request)
 
 public function update(UpdatePublicationRequest $request, Publication $contenu)
 {
+    $this->authorize('update', $contenu);
     $contenu->update($request->validated());
 
     return redirect()
@@ -79,6 +82,7 @@ public function update(UpdatePublicationRequest $request, Publication $contenu)
 
 public function destroy(Publication $contenu)
 {
+    $this->authorize('delete', $contenu);
     $contenu->delete();
 
     return redirect()
