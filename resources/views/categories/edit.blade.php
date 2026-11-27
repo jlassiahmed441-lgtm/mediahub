@@ -36,10 +36,8 @@
         <span class="erreur-champ">{{ $message }}</span>
     @enderror
 </div>
-
-
-        <button type="submit">Enregistrer les modifications</button>
     </form>
+    <button type="submit">Enregistrer les modifications</button>
 
 @endsection
 

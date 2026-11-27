@@ -19,6 +19,32 @@
         <x-carte :titre="$publication->titre" :vedette="$compteur === 0">
 
             <p>{{ $publication->contenu }}</p>
+{{-- Afficher l'image --}}
+@if ($publication->image)
+    <img
+        src="{{ Storage::url($publication->image) }}"
+        alt="Image de {{ $publication->titre }}"
+        style="max-width: 100%; height: auto; border-radius: 10px;"
+    >
+@endif
+
+{{-- Afficher le fichier audio ou vidéo --}}
+@if ($publication->fichier_media)
+
+    @if ($publication->type_media === 'audio')
+        <audio controls>
+            <source src="{{ Storage::url($publication->fichier_media) }}">
+            Votre navigateur ne supporte pas la lecture audio.
+        </audio>
+
+    @elseif ($publication->type_media === 'video')
+        <video controls style="max-width: 100%;">
+            <source src="{{ Storage::url($publication->fichier_media) }}">
+            Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
+    @endif
+
+@endif
 
             <p>
                 <strong>Catégorie :</strong>

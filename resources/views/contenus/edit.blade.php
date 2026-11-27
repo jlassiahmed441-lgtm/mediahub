@@ -6,7 +6,7 @@
 
     <h1>Modifier une publication</h1>
 
-    <form action="{{ route('contenus.update', $publication) }}" method="POST">
+    <form action="{{ route('contenus.update', $publication) }}" method="POST" enctype="multipart/form-data">
 
         @csrf
         @method('PUT')
@@ -36,6 +36,37 @@
         </div>
 
         <button type="submit">Enregistrer les modifications</button>
+        {{-- Image actuelle --}}
+@if ($publication->image)
+    <div>
+        <p>Image actuelle :</p>
+        <img src="{{ Storage::url($publication->image) }}"
+             alt="Image actuelle"
+             style="max-width: 200px;">
+    </div>
+@endif
+
+<div>
+    <label for="image">Remplacer l'image :</label>
+    <input type="file" name="image" id="image" accept="image/*">
+    @error('image')
+        <span class="erreur-champ">{{ $message }}</span>
+    @enderror
+</div>
+
+{{-- Média actuel --}}
+@if ($publication->fichier_media)
+    <p>Média actuel : {{ $publication->type_media }}</p>
+@endif
+
+<div>
+    <label for="fichier_media">Remplacer le fichier audio ou vidéo :</label>
+    <input type="file" name="fichier_media" id="fichier_media"
+           accept="audio/*,video/*">
+    @error('fichier_media')
+        <span class="erreur-champ">{{ $message }}</span>
+    @enderror
+</div>
 
     </form>
 

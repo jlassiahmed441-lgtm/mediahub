@@ -7,6 +7,7 @@ use App\Models\Categorie;
 use App\Http\Requests\StorePublicationRequest;
 use App\Http\Requests\UpdatePublicationRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class ContenuController extends Controller
 {
@@ -47,8 +48,28 @@ public function store(StorePublicationRequest $request)
 {
     $donnees = $request->validated();
 
-   // Associer la publication à l'utilisateur connecté
+    // Associer la publication à l'utilisateur connecté
     $donnees['user_id'] = auth()->id();
+
+    // Enregistrer l'image
+    if ($request->hasFile('image')) {
+        $donnees['image'] = $request->file('image')
+            ->store('publications', 'public');
+    }
+
+    // Enregistrer le fichier audio ou vidéo
+    if ($request->hasFile('fichier_media')) {
+        $fichier = $request->file('fichier_media');
+
+        $donnees['fichier_media'] = $fichier
+            ->store('medias', 'public');
+
+        // Déterminer le type du média
+        $donnees['type_media'] =
+            str_starts_with($fichier->getMimeType(), 'audio')
+                ? 'audio'
+                : 'video';
+    }
 
     $publication = Publication::create($donnees);
 
@@ -72,7 +93,39 @@ public function store(StorePublicationRequest $request)
 public function update(UpdatePublicationRequest $request, Publication $contenu)
 {
     $this->authorize('update', $contenu);
-    $contenu->update($request->validated());
+
+    $donnees = $request->validated();
+
+    // Remplacer l'image si une nouvelle image est envoyée
+    if ($request->hasFile('image')) {
+
+        if ($contenu->image) {
+            Storage::disk('public')->delete($contenu->image);
+        }
+
+        $donnees['image'] = $request->file('image')
+            ->store('publications', 'public');
+    }
+
+    // Remplacer le fichier audio ou vidéo
+    if ($request->hasFile('fichier_media')) {
+
+        if ($contenu->fichier_media) {
+            Storage::disk('public')->delete($contenu->fichier_media);
+        }
+
+        $fichier = $request->file('fichier_media');
+
+        $donnees['fichier_media'] = $fichier
+            ->store('medias', 'public');
+
+        $donnees['type_media'] =
+            str_starts_with($fichier->getMimeType(), 'audio')
+                ? 'audio'
+                : 'video';
+    }
+
+    $contenu->update($donnees);
 
     return redirect()
         ->route('contenus.show', $contenu)
