@@ -14,21 +14,17 @@ class StoreCategorieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'titre' => 'required|string|max:255',
-            'contenu' => 'required|string|min:20',
-            'categorie_id' => 'required|exists:categories,id',
+            'nom' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:categories,slug',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'titre.required' => 'Le titre est obligatoire.',
-            'titre.max' => 'Le titre ne doit pas dépasser 255 caractères.',
-            'contenu.required' => 'Le contenu est obligatoire.',
-            'contenu.min' => 'Le contenu doit contenir au moins 20 caractères.',
-            'categorie_id.required' => 'Veuillez choisir une catégorie.',
-            'categorie_id.exists' => 'La catégorie sélectionnée n’existe pas.',
+            'nom.required' => 'Le nom de la catégorie est obligatoire.',
+            'slug.required' => 'Le slug est obligatoire.',
+            'slug.unique' => 'Ce slug existe déjà.',
         ];
     }
 }

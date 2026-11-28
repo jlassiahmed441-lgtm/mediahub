@@ -13,9 +13,10 @@ class ContenuController extends Controller
 {
     public function index($tri = 'recent')
     {
-        $publications = Publication::with(['categorie', 'auteur'])
-            ->latest()
-            ->paginate(9);
+       $publications = Publication::with(['categorie', 'auteur'])
+    ->withCount('commentaires')
+    ->latest()
+    ->paginate(9);
 
         return view('contenus.index', [
             'publications' => $publications,
